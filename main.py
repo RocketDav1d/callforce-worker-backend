@@ -37,6 +37,8 @@ def read_root():
     return {"Hello": "World"}
 
 
+# {"id": "random", "status": "Pending", "response": "None"}
+
 @app.post("/extract")
 async def extract(payload: Dict[str, str] = Body(...)):
     print("Hit extract route: ", payload)
@@ -76,7 +78,7 @@ async def extract(payload: Dict[str, str] = Body(...)):
         "transcript": transcript
     }
     end = time.time()
-    print(f"Extract took {end - start} seconds")
+    
     # print(response)
     return response
 
@@ -84,6 +86,7 @@ async def extract(payload: Dict[str, str] = Body(...)):
 
 @app.post("/prompt")
 async def prompt(payload: Dict[str, str] = Body(...)):
+    start = time.time()
     print("Hit prompt route: ", payload)
     file_key = payload["file_key"]
     collection_name = payload["userId"]
@@ -91,7 +94,9 @@ async def prompt(payload: Dict[str, str] = Body(...)):
     language: str = "de"
 
     response = await prompt_with_query(file_key, collection_name, query_input, language)
-
+    end = time.time()
+    duration = end - start
+    print(f"Prompt took {duration} seconds")
     return {
         "response": response
     }
