@@ -72,8 +72,6 @@ async def get_embedding(text_to_embed):
             model="text-embedding-ada-002",
             input=text_to_embed
         )
-        if response.status != 200:
-            print(f"Failed to create embeddings with OpenAI, status code: {response.status}")
         embedding = response["data"][0]["embedding"]
         return embedding
     except openai.error.InvalidRequestError as e:
@@ -172,22 +170,27 @@ def generate_response_with_context_and_id(query_results, api_key, query_input, l
 
     MODEL = "gpt-3.5-turbo"
     # Call OpenAI API to get the response
-    response = openai.ChatCompletion.create(
-        model=MODEL,
-        messages=messages  # Adjust the max_tokens as needed for your response length
-    )
+    try: 
+        response = openai.ChatCompletion.create(
+            model=MODEL,
+            messages=messages  # Adjust the max_tokens as needed for your response length
+        )
+        response_data = response['choices'][0]['message']['content']
+        # print("response_data", response_data)
+        # response_dict = eval(response_data)  # Convert the string to a dictionary
 
-    if response.status != 200:
-        print(f"Failed to create response with OpenAI GPT, status code: {response.status}")
+        # answer = response_dict['answer']
+        # context_text = response_dict['context_text']
+        print("response_data", response_data)
+        return response_data
+    
+    except openai.error.InvalidRequestError as e:
+        print(f"Skipping embedding for invalid text: {messages}")
+        print(f"Error: {str(e)}")
+        return None
 
-    response_data = response['choices'][0]['message']['content']
-    # print("response_data", response_data)
-    # response_dict = eval(response_data)  # Convert the string to a dictionary
 
-    # answer = response_dict['answer']
-    # context_text = response_dict['context_text']
-    print("response_data", response_data)
-    return response_data
+
 
 
 
