@@ -10,6 +10,7 @@ from handler.summarize_handler import summarize
 from handler.prompt_handler import prompt_with_query, embed
 from handler.hubspot_handler import return_properties, save_properties_to_chroma, query_the_collection
 import nltk
+import time
 nltk.download('punkt')
 
 
@@ -39,6 +40,7 @@ def read_root():
 @app.post("/extract")
 async def extract(payload: Dict[str, str] = Body(...)):
     print("Hit extract route: ", payload)
+    start = time.time()
     # or "hubspot_access_token" not in payload or "hubspot_refresh_token" not in payload
     if "s3_key" not in payload or "userId" not in payload:
         raise HTTPException(
@@ -73,6 +75,8 @@ async def extract(payload: Dict[str, str] = Body(...)):
         "collection": collection,
         "transcript": transcript
     }
+    end = time.time()
+    print(f"Extract took {end - start} seconds")
     # print(response)
     return response
 
