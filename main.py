@@ -78,7 +78,7 @@ async def extract(payload: Dict[str, str] = Body(...)):
         "transcript": transcript
     }
     end = time.time()
-    
+    print(f"Extract took {end - start} seconds")
     # print(response)
     return response
 
