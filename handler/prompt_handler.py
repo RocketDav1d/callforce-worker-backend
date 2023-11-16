@@ -17,7 +17,7 @@ dotenv.load_dotenv()
 
 # Intialize ChromaDb
 # chroma_client = HttpClient(host="localhost", port = 8000, settings=Settings(allow_reset=True, anonymized_telemetry=False))
-chroma_client = chromadb.Client()
+# chroma_client = chromadb.Client()
 
 # Initialize OpenAI
 openai.api_key = os.environ.get("OPENAI_API_KEY")
@@ -26,6 +26,12 @@ openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 
 # 📨 Init ChromaDB with collection and add embeddings ---------------------------------------------
+
+async def initialize_chroma_client():
+    chroma_client = chromadb.HttpClient(host="18.197.143.82", port=8000)
+    print("Successfully initialized ChromaDb client", chroma_client)
+    return chroma_client
+
 
 def generate_id(text_chunk, index):
     content_hash = hashlib.md5(text_chunk.encode()).hexdigest()
@@ -54,6 +60,7 @@ def chunk_transcript_with_speaker(transcript_text):
         # Adding remaining sentences to chunks
         if chunk:
             chunks.append(f"{speaker_info}: {' '.join(chunk)}")
+    print(f"Chunked transcript into {len(chunks)} chunks")
     return chunks
 
 
@@ -65,6 +72,8 @@ async def get_embedding(text_to_embed):
             model="text-embedding-ada-002",
             input=text_to_embed
         )
+        if response.status != 200:
+            print(f"Failed to create embeddings with OpenAI, status code: {response.status}")
         embedding = response["data"][0]["embedding"]
         return embedding
     except openai.error.InvalidRequestError as e:
@@ -102,7 +111,7 @@ async def save_to_vectordb(vectordb_client, embeddings, chunked_transcript, coll
     await loop.run_in_executor(None, lambda: collection.add(documents=documents, embeddings=embeddings, metadatas=metadatas, ids=ids))
     
     print(f"Saved {len(chunked_transcript)} embeddings to Chroma in collection '{collection_name}'")
-
+    print("Done saving to Chroma")
     return collection_name
 
 
@@ -118,6 +127,7 @@ async def save_embeddings(transcript, file_key, collection_name):
     # end = time.time()
     # print("Embeddings: ", embeddings, "\nTime taken: ", end-start)
     # Save the embeddings to ChromaDb
+    chroma_client = await initialize_chroma_client()
     collection_name = await save_to_vectordb(vectordb_client=chroma_client, embeddings=embeddings, chunked_transcript=chunked_transcript, collection_name=collection_name, file_key=file_key)
     return collection_name
 
@@ -128,6 +138,7 @@ async def save_embeddings(transcript, file_key, collection_name):
 # 🔍 Query the Collection ---------------------------------------------
 
 async def query_the_collection(file_key, collection_name, query_input):
+    chroma_client = await initialize_chroma_client()
     collection = chroma_client.get_or_create_collection(name=collection_name)
     embedding = await get_embedding(query_input)
 
@@ -166,13 +177,16 @@ def generate_response_with_context_and_id(query_results, api_key, query_input, l
         messages=messages  # Adjust the max_tokens as needed for your response length
     )
 
+    if response.status != 200:
+        print(f"Failed to create response with OpenAI GPT, status code: {response.status}")
+
     response_data = response['choices'][0]['message']['content']
     # print("response_data", response_data)
     # response_dict = eval(response_data)  # Convert the string to a dictionary
 
     # answer = response_dict['answer']
     # context_text = response_dict['context_text']
-
+    print("response_data", response_data)
     return response_data
 
 

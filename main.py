@@ -35,7 +35,7 @@ def read_root():
 
 @app.post("/extract")
 async def extract(payload: Dict[str, str] = Body(...)):
-    print(payload)
+    print("Hit extract route: ", payload)
     # or "hubspot_access_token" not in payload or "hubspot_refresh_token" not in payload
     if "s3_key" not in payload or "userId" not in payload:
         raise HTTPException(
@@ -77,7 +77,7 @@ async def extract(payload: Dict[str, str] = Body(...)):
 
 @app.post("/prompt")
 async def prompt(payload: Dict[str, str] = Body(...)):
-    print(payload)
+    print("Hit prompt route: ", payload)
     file_key = payload["file_key"]
     collection_name = payload["userId"]
     query_input = payload["prompt"]
@@ -93,7 +93,7 @@ async def prompt(payload: Dict[str, str] = Body(...)):
 
 @app.post("/properties")
 async def get_properties(access_token: TokenModel):
-    print(access_token.access_token)
+    print("Hit properties route: ", access_token.access_token)
     properties = await return_properties(access_token.access_token)
     print(properties)
     if properties is None:
@@ -109,7 +109,7 @@ async def get_properties(access_token: TokenModel):
 @app.post("/hubspot/properties/query")
 async def get_properties(request: Request):
     raw_json = await request.json()
-    print("Received JSON:", raw_json)
+    print("Hit /hubspot/properties/query route:", raw_json)
     file_key = raw_json["s3_key"]
     userId = raw_json["userId"]
     # Assuming 'raw_json' contains a 'properties' field
@@ -132,4 +132,4 @@ async def get_properties(request: Request):
 
 @app.post("/hubspot/properties/create")
 async def get_properties(properties: Dict[str, str] = Body(...)):
-    pass
+    print("Hit /hubspot/properties/create route:", properties)

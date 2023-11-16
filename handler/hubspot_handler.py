@@ -28,12 +28,20 @@ dotenv.load_dotenv()
 
 # Intialize ChromaDb
 # chroma_client = HttpClient(host="localhost", port = 8000, settings=Settings(allow_reset=True, anonymized_telemetry=False))
-chroma_client = chromadb.Client()
+# chroma_client = chromadb.HttpClient(host="http://18.197.143.82", port = 8000)
+# chroma_client = chromadb.Client()
 # print("ChromaDb Client: ", chroma_client
+
+
+async def initialize_chroma_client():
+    chroma_client = chromadb.HttpClient(host="18.197.143.82", port=8000)
+    print("Successfully initialized ChromaDb client", chroma_client)
+    return chroma_client
 
 
 async def get_client(hubspot_access_token):
     hubspot = HubSpot(access_token=hubspot_access_token)
+    print("successfully created hubspot client")
     return hubspot
 
 
@@ -45,6 +53,7 @@ async def get_embedding(text_to_embed):
             input=text_to_embed
         )
         embedding = response["data"][0]["embedding"]
+        print(f"Successfully embedded text: {text_to_embed}")
         return embedding
     except openai.error.InvalidRequestError as e:
         print(f"Skipping embedding for invalid text: {text_to_embed}")
@@ -101,6 +110,7 @@ async def return_properties(access_token):
         types = ["contacts", "companies", "deals"]
         tasks = [fetch_properties(session, object_type, access_token) for object_type in types]
         properties = await asyncio.gather(*tasks)
+        print("PROPERTIES: ", properties)
         return properties
         # await save_properties_to_chroma({k: v for d in properties for k, v in d.items()})
 
@@ -111,6 +121,7 @@ async def return_properties(access_token):
 
 async def save_properties_to_chroma(properties, file_key, userId):
     collection_name = userId + "_properties"
+    chroma_client = await initialize_chroma_client()
     collection = chroma_client.get_or_create_collection(name=collection_name)
 
     for prop in properties:
@@ -128,12 +139,14 @@ async def save_properties_to_chroma(properties, file_key, userId):
             "userId": prop["userId"],
             "file_key": file_key
         }
+        print("add to chroma")
         await collection.add(embeddings=[embedding], metadatas=[metadata])
 
 
 
 async def query_the_collection(file_key, userId, properties):
     print("QUERY THE COLLECTION")
+    chroma_client = await initialize_chroma_client()
     collection = chroma_client.get_or_create_collection(name=userId)
     translator= Translator(to_lang="de")
 
