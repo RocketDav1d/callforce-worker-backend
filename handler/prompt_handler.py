@@ -20,7 +20,7 @@ dotenv.load_dotenv()
 chroma_client = chromadb.Client()
 
 # Initialize OpenAI
-openai.api_key = "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"
+openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 
 
