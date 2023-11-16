@@ -9,6 +9,9 @@ from handler.transcribe_handler import transcribe_audio_from_s3
 from handler.summarize_handler import summarize
 from handler.prompt_handler import prompt_with_query, embed
 from handler.hubspot_handler import return_properties, save_properties_to_chroma, query_the_collection
+import nltk
+nltk.download('punkt')
+
 
 
 app = FastAPI()
