@@ -120,6 +120,7 @@ async def get_properties(access_token: TokenModel):
 
 @app.post("/hubspot/properties/query")
 async def get_properties(request: Request):
+    print(request)
     raw_json = await request.json()
     print("Hit /hubspot/properties/query route:", raw_json)
     file_key = raw_json["s3_key"]
@@ -130,14 +131,14 @@ async def get_properties(request: Request):
     print(properties)
 
      # Call the function to save properties to Chroma
-    try:
-        query_results = await query_the_collection(file_key=file_key, userId=userId, properties=properties)
-        print("QUERY RESULTS: ", query_results)
-    except Exception as e:
-        print(f"Error querying Chroma: {e}")
-        raise HTTPException(status_code=500, detail="Error querying Chroma")
+    # try:
+    #     query_results = await query_the_collection(file_key=file_key, userId=userId, properties=properties)
+    #     print("QUERY RESULTS: ", query_results)
+    # except Exception as e:
+    #     print(f"Error querying Chroma: {e}")
+    #     raise HTTPException(status_code=500, detail="Error querying Chroma")
 
-    return {"query_results": query_results}
+    # return {"query_results": query_results}
 
     
 
