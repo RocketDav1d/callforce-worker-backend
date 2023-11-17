@@ -20,6 +20,13 @@ After that run this commnd to run the app locall on port 8000
 uvicorn main:app --reload --host 127.0.0.1 --port 8000
 ```
 
+For development you can initialise a Chroma instace with ```chromadb.Client()```
+
+If you want to deploy your project you'll need to deploy Chroma
+This is easiest with AWS
+A good tutorial on how to so can be found in the [Chroma Docs](https://docs.trychroma.com/deployment) or in this [Video](https://www.youtube.com/watch?v=xRIEKjOosaM)
+
+
 
 ## Environment Variables
 
