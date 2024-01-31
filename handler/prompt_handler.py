@@ -24,7 +24,6 @@ openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 
 
-
 # 📨 Init ChromaDB with collection and add embeddings ---------------------------------------------
 
 async def initialize_chroma_client():
@@ -224,113 +223,6 @@ async def prompt_with_query(file_key, collection_name, query_input, language):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# old code
-
-
-# def prompt(chat_id, collection_name, query_input):
-#     query_results = asyncio.run(query_the_collection(chat_id, collection_name, query_input))
-#     response, context_text = generate_response_with_context_and_id(query_results, openai.api_key, query_input)
-#     return response, context_text
-
-
-# def extraxt_response():
-#     while True:
-#         collection_name = input(f"Collection Name:")
-#         if collection_name == "exit":
-#             print('Exiting')
-#             sys.exit()
-#         chat_id = input(f"Chat ID:")
-#         if chat_id == "exit":
-#             print('Exiting')
-#             sys.exit()
-#         query_input = input(f"Query:")
-#         if query_input == "exit":
-#             print('Exiting')
-#             sys.exit()
-
-#         # Run the save_embeddings function
-#         asyncio.run(save_embeddings(chat_id, collection_name))
-
-#         # Run the query_the_collection function and print the results
-#         query_results = asyncio.run(query_the_collection(chat_id, collection_name, query_input))
-
-#         # Generate the response with context and document ID
-#         response, context_text = generate_response_with_context_and_id(query_results, openai.api_key, query_input)
-#         print(f"Response: {response}")
-#         print(f"Document ID: {context_text}")
-
-
-
-
-
-
-
-# def map_ids_to_integers(query_results):
-#     # Extract the IDs and documents from query_results
-#     ids = query_results.get("ids", [])
-#     documents = query_results.get("documents", [])
-
-#     # Create dictionaries to map IDs to integers and vice versa
-#     id_to_integer_mapping = {}
-#     integer_to_id_mapping = {}
-
-#     # Iterate through the IDs and documents and assign integers
-#     for i, (id_list, document_list) in enumerate(zip(ids, documents)):
-#         # Take the first ID as the key and the corresponding document as the value
-#         id_key = id_list[0]
-#         document_value = document_list[0]
-
-#         # Assign an integer (starting from 1) to the ID
-#         integer_key = str(i + 1)
-#         id_to_integer_mapping[id_key] = integer_key
-#         integer_to_id_mapping[integer_key] = id_key
-
-#     return id_to_integer_mapping, integer_to_id_mapping
-
-
-
-# def create_id_to_document_mapping(query_results):
-#     ids = query_results.get("ids", [])
-#     documents = query_results.get("documents", [])
-
-#     id_to_document_mapping = {}
-
-#     for id_list, document_list in zip(ids, documents):
-#         for id, document in zip(id_list, document_list):
-#             id_to_document_mapping[id] = document
-
-#     return id_to_document_mapping
 
 
 

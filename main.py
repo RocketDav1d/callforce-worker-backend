@@ -13,8 +13,6 @@ import nltk
 import time
 nltk.download('punkt')
 
-
-
 app = FastAPI()
 
 

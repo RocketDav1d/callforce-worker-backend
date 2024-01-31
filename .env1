@@ -1,0 +1,43 @@
+# Environment variables declared in this file are automatically made available to Prisma.
+# See the documentation for more detail: https://pris.ly/d/prisma-schema#accessing-environment-variables-from-the-schema
+
+# Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server, MongoDB and CockroachDB.
+# See the documentation for all the connection string options: https://pris.ly/d/connection-strings
+
+# NextAuth
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=secret
+NEXTAUTH_URL_PROD=https://callforce-ai.vercel.app/
+
+
+PW=Haus123456--gt3
+NEXT_PUBLIC_SUPABASE_URI=postgresql://postgres:Haus123456--gt3@db.kloftfxyikjolrolkblv.supabase.co:5432/postgres
+NEXT_PUBLIC_SUPABASE_URL=https://kloftfxyikjolrolkblv.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtsb2Z0Znh5aWtqb2xyb2xrYmx2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTc0NjM2MjgsImV4cCI6MjAxMzAzOTYyOH0.CTL4LsdsyXJ_9rdyPiKBl5CfpkjWUJs4x0M29g6tjv4
+
+
+#Hubspot
+# HUBSPOT_CLIENT_ID=f584c3f5-9447-4bd5-a8be-42724e23b623
+# HUBSPOT_CLIENT_SECRET=50566977-23ae-42ca-89ce-1e9d8da158c5
+
+HUBSPOT_CLIENT_ID=0f1622c0-33ee-48a6-b61d-79c86c102ccd
+HUBSPOT_CLIENT_SECRET=72bf0789-d670-411b-8c28-a46f16d4626a
+
+#Google
+GOOGLE_CLIENT_ID=863304165716-675ojq88u0rpncoge8mjt3rh1vsv4mdc.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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
+
+#AWS S3
+NEXT_PUBLIC_S3_AWS_ACCESS_KEY_ID=AKIAWZPHQTBV6E2YASG3
+NEXT_PUBLIC_S3_AWS_SECRET_ACCESS_KEY=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
+NEXT_PUBLIC_S3_BUCKET_NAME=callforce-app
+
+#OpenAI
+OPENAI_API_KEY=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
+
+
+#Stripe
+STRIPE_SECRET_KEY=sk_test_51OCQ96BBUYGkFC1rwZMcbeGj9nD1UAnzj5YwRUy7pZat7k3euqQKdPpIANSMM3zPqPXI2P4tIQi440cN03m4BUXm000sMPAZ0N
+STRIPE_WEBHOOK_SIGNING_SECRET=whsec_8cde58b4216cb3f8958ccdb7430e5a6b63566d92dafc31a662e789e7348f9f56
+NEXT_BASE_URL=http://localhost:3000
+NEXT_BASE_URL_PROD=https://callforce-ai.vercel.app/
